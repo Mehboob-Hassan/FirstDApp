@@ -1,0 +1,74 @@
+.home{
+    background-color: rgb(17, 0, 255);
+}
+ul{
+    display: flex;
+    background-color: rgb(140, 140, 193);
+}
+ul li{
+    list-style: none;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* Welcome */
+.welcome{
+    height: 300px;
+    width: 100vw;
+    background-color: rgb(212, 0, 255);
+    display: flex;
+}
+
+.connectButton{
+    padding: 10px 30px;
+    background-color: rgb(43, 124, 124);
+    color: white;
+    border: none;
+    border-radius: 10px;
+}
+.left{
+    width: 50%;
+    float: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.right{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.right .card{
+    background-color: rgb(51, 7, 59);
+    width: 15vw;
+    height: 20vh;
+    border-radius: 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.right .form{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.right .form input{
+    margin-top: 10px;
+    padding: 5px;
+    border-radius: 10px;
+}
+.btnSubmit{
+    padding: 10px 30px;
+    background-color: rgb(43, 124, 124);
+    color: white;
+    border: none;
+    border-radius: 10px;
+}
