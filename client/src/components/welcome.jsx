@@ -6,12 +6,9 @@ const Welcome = ()=>{
 
     const handleSubmit = (e)=>{
         const {addressTo, amount, phrase} = formData;
-        console.log(addressTo, amount, phrase)
-
         e.preventDefault();
 
-        if(!addressTo || !amount || !phrase) return console.log("No data found");;
-
+        if(!addressTo || !amount || !phrase) return console.log("No data found");
         sendTransaction();
      }
     return(

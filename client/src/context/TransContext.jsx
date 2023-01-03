@@ -6,27 +6,30 @@ import { contractAbi, contractAddress } from "../utils/constants";
 export const TransactionContext = React.createContext();
 const {ethereum} = window;
 
+//---------------GET ETHEREUM CONTRACT-------------------
 const getEthereumContract = () => {
     const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
     const transactionContract = new ethers.Contract(contractAddress, contractAbi, signer);
 
-    console.log({
-        provider,
-        signer,
-        transactionContract
-    });
+    return transactionContract;
 }
 
+
+//------------------- TRANSACTION PROVIDER-------------------
 export const TransactionProvider = ({children}) => {
     const [currentAccount, setCurrentAccount] = useState(null);
     const [formData, setFormData] = useState({addressTo : '', amount : '', phrase : ''});
+    const [isLoading, setLoading] = useState(false);
+    const [transactionCount, setTransactionCount] = useState(localStorage.getItem('transactionCount'));
 
-
+    // HANDLE CHANGE TO CHANGE VALUES OF INPUT FIELDS
     const handleChange = (e)=>{
         setFormData((prevState)=>({...prevState, [e.target.name]: e.target.value}));
     }
 
+
+    // -----------CHECK IF WALLET IS CONNECTED
     const checkIfWalletIsConnected = async()=>{
        try {
          if(!ethereum) return alert("Please Install the metamask");
@@ -45,6 +48,8 @@ export const TransactionProvider = ({children}) => {
        }
     }
 
+
+    // ----------------CONNECT WALLET---------------
     const connectWallet = async()=>{
         try {  
             if(!ethereum) return alert("Please Install the metamask");
@@ -58,12 +63,44 @@ export const TransactionProvider = ({children}) => {
         }
     }
 
+
+    // -------------SEND TRANSACTION--------------------
     const sendTransaction = async()=>{
         try {
             if(!ethereum) return alert("Please Install the metamask");
 
             const {addressTo, amount, phrase} = formData;
-            getEthereumContract();
+
+            const transactionContract = getEthereumContract();
+            // parese decimal amount in gwei hexadecimal
+            const parsedAmount = ethers.utils.parseEther(amount);
+            // -----------
+
+            //code for sending ethereums 
+        // ---------------
+            await ethereum.request({
+                method: 'eth_sendTransaction',
+                params: [{
+                    from: currentAccount,
+                    to: addressTo,
+                    gas: '0x5208',   //21000 GWEI
+                    value: parsedAmount._hex, //
+                }]
+            })
+        // --------------- 
+
+        // Add Transaction (store) to Blockchain
+            const transactionHash = await transactionContract.addToBlockchain(addressTo, parsedAmount, phrase, "Keyword");
+
+            setLoading(true);
+            console.log(`Loading - ${transactionHash.hash}`);
+            await transactionHash.wait();
+            setLoading(false);
+            console.log(`Successful - ${transactionHash.hash}`);
+
+            const transactionCount = await transactionContract.getTransactionCount();
+
+            setTransactionCount(transactionCount.toNumber());  
 
         } catch (error) {
             console.error(error);
