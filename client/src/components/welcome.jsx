@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { TransactionContext } from "../context/TransContext";
+import { shortenAddress } from "../utils/shortenAddress";
 
 const Welcome = ()=>{
     const { connectWallet, currentAccount, formData, sendTransaction, handleChange } = useContext(TransactionContext);
@@ -21,7 +22,7 @@ const Welcome = ()=>{
             </div>
             <div className="right">
                 <div className="card">
-                    <h3>Address</h3>
+                <h3>{shortenAddress(currentAccount)}</h3>
                     <h4>Etherium</h4>
                 </div>
                 <div className="form">
